@@ -2,7 +2,10 @@ import re
 import sys
 
 class HeaderGenerator(object):
-    function_regex = r'(static\s+)?([\w*]+[\s*]+[\w*]+\s*\([\s\w*,]+\)\s*\{)'
+    function_regex = ('(static\s+)?'
+                      '([\w*]+[\s*]+[\w*]+\s*'
+                      '\(([\w*]+[\s*]+[\w*]+,?\s*)+\)\s*\{)')
+
     matcher = re.compile(function_regex, re.MULTILINE)
 
     def __init__(self, filename):
@@ -12,12 +15,13 @@ class HeaderGenerator(object):
         function_sigs = []
 
         with open(self._filename, 'r') as fh:
-            for static, rest in self.__class__.matcher.findall(fh.read()):
+            for match in self.__class__.matcher.findall(fh.read()):
                 # Ignore static functions
-                if static != '':
+                if match[0] != '':
                     continue
                 
-                function_sigs.append(rest.rstrip('{').strip() + ';')
+                # Strip opening brace and add semicolon
+                function_sigs.append(match[1].rstrip('{').strip() + ';')
         
         return function_sigs
 
