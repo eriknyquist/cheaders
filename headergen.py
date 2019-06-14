@@ -1,5 +1,8 @@
 import re
 import sys
+import datetime
+
+print daetime.now().year
 
 class HeaderGenerator(object):
     function_regex = ('(static\s+)?'
