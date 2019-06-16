@@ -1,9 +1,16 @@
+__version__ = "1.0.0"
+
 import re
 import sys
 import os
 import datetime
 
-class HeaderGenerator(object):
+
+class Generator(object):
+    """
+    Class to generate a header (.h) file file from a C (.c) file
+    """
+
     function_regex = ('(static\s+)?'
                       '([\w*]+[\s*]+[\w*]+\s*'
                       '\(([\w*]+[\s*]+[\w*]+,?\s*)*\)\s*\{)')
@@ -11,6 +18,13 @@ class HeaderGenerator(object):
     matcher = re.compile(function_regex, re.MULTILINE)
 
     def __init__(self, filename, author=None, header_filename=None):
+        """
+        :param str filename: name of C file to generate header file for.
+        :param str author: author name.
+        :param str header_filename: name of header file to generate. If unset,\
+            a default filename will be generated based on the C file name.
+        """
+
         self._filename = filename
         self._year = datetime.datetime.now().year
         self._author = author
@@ -22,10 +36,6 @@ class HeaderGenerator(object):
 
         self._header_basename = os.path.basename(self._header_filename)
         self._guard_macro = self._header_basename.replace('.', '_').upper()
-
-    @property
-    def header_filename(self):
-        return self._header_basename
 
     def _comment_header(self):
         ret = ("/*\n * %s\n *\n * (Description here)\n"
@@ -103,7 +113,23 @@ class HeaderGenerator(object):
 
         return function_sigs
 
+    @property
+    def header_filename(self):
+        """
+        Auto-generated filename for generated header file
+        """
+        return self._header_basename
+
     def generate(self, doxygen_comments=False):
+        """
+        Generate text for header file.
+
+        :param bool doxygen_comments: if True, generated function declarations\
+            will include doxygen comments with parameter documentation.
+        :return: generated text for header file
+        :rtype: str
+        """
+
         ret = self._comment_header()
         ret += "#ifndef {0}\n#define {0}\n\n\n".format(self._guard_macro)
         declarations = self._get_nonstatic_function_declarations()
@@ -116,6 +142,3 @@ class HeaderGenerator(object):
 
         ret += "#endif /* %s */\n" % self._guard_macro
         return ret
-
-h = HeaderGenerator(sys.argv[1], author="Erik Nyquist")
-print h.generate(doxygen_comments=True)
