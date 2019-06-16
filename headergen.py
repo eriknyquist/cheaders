@@ -23,6 +23,10 @@ class HeaderGenerator(object):
         self._header_basename = os.path.basename(self._header_filename)
         self._guard_macro = self._header_basename.replace('.', '_').upper()
 
+    @property
+    def header_filename(self):
+        return self._header_basename
+
     def _comment_header(self):
         ret = ("/*\n * %s\n *\n * (Description here)\n"
                % self._header_basename)
