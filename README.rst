@@ -35,8 +35,7 @@ Example C source file
 	}
 
 
-	void myotherfunction(int intvar, float floatvar,
-                         char long_name_variable)
+	void myotherfunction(int intvar, float floatvar, char long_name_variable)
 	{
 		// Do other important stuff
 	}
@@ -80,11 +79,8 @@ Generated header file
 	 * @param   intvar              (description)
 	 * @param   floatvar            (description)
 	 * @param   long_name_variable  (description)
-	 *
-	 * @return  (description)
 	 */
-	void myotherfunction(int intvar, float floatvar,
-                         char long_name_variable);
+	void myotherfunction(int intvar, float floatvar, char long_name_variable);
 
 
 	#endif /* MYFILE_H */
