@@ -5,6 +5,12 @@ This tool reads a C source file (.c) and generates the text for the correspondin
 header file, with function declarations for any non-static function definitions
 found in the provided C file.
 
+Installation
+============
+
+::
+
+    pip install cheaders
 
 Usage
 =====
